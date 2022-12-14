@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "ehleho"
+version = "0.1.0"
+description = "ehlrk dkslfk ehofkrh!!"
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pynput = "^1.7.6"
+
+[tool.poetry.scripts]
+start = "main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
