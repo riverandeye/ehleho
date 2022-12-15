@@ -1,21 +1,20 @@
-from pynput import keyboard
+import history
 
-text_history = []
+from pynput import keyboard
+from lib.alert import do_alert
+from lib.error import EndsWithInvalidWordException
 
 def processKeys(key : keyboard.Key):
-    global text_history
-
     if key == keyboard.Key.backspace:
-        if len(text_history) > 0:
-            text_history.pop(len(text_history) - 1)
+        if not history.is_empty():
+            history.pop_right()
     elif key == keyboard.Key.enter:
-        text_history.clear()
-    elif key == keyboard.Key.shift or key == keyboard.Key.shift_l or key == keyboard.Key.shift_r:
-        pass
+        history.validate()
+        history.clear()
     elif key == keyboard.Key.tab:
-        text_history.append("   ")
+        history.append("   ")
     elif key == keyboard.Key.space:
-        text_history.append(" ")
+        history.append(" ")
 
 def get_key_string(key : keyboard.Key | keyboard.KeyCode | None):
     if isinstance(key, keyboard.Key):
@@ -23,10 +22,16 @@ def get_key_string(key : keyboard.Key | keyboard.KeyCode | None):
 
 def on_press(key : keyboard.Key | keyboard.KeyCode | None):
     if isinstance(key, keyboard.Key):
-        processKeys(key)
+        try:
+            processKeys(key)
+        except EndsWithInvalidWordException as e :
+            do_alert()
+        except Exception as e:
+            print("Unexpected exception")
+            print(e)
     if isinstance(key, keyboard.KeyCode):
-        text_history.append(key.char)
-    print("".join(text_history))
+        history.append(key.char)
+    print("".join(history.to_list()))
 
 if __name__ == "__main__" :
     with keyboard.Listener(on_press=on_press) as listener:
