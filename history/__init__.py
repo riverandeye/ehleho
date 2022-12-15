@@ -44,11 +44,14 @@ def chunk_word_list(word_list, splitter=" "):
             cur = []
         else:
             cur.append(word_list[i])
+    if len(cur) > 0:
+        chunks.append([*cur])
     return chunks
 
 def validate():
+    print(text_history)
     for chunks in chunk_word_list(text_history, " "):
-        print("1")
+        print(chunks)
         if ends_with_되(chunks):
             text_history.clear()
             raise EndsWithInvalidWordException("되")
