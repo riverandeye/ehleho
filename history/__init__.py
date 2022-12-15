@@ -18,24 +18,37 @@ def to_list():
 def is_empty():
     return len(text_history) == 0
 
-def filter_until_alphabet():
-    if len(text_history) == 0: return []
-    hist = [*text_history]
+def filter_until_alphabet(word_list):
+    if len(word_list) == 0: return []
+    hist = [*word_list]
     while len(hist) > 0 and not hist[len(hist) - 1].isalpha():
         hist.pop(len(hist) - 1)
     return hist
 
-def ends_with_되():
-    word_list = filter_until_alphabet()
-    if len(word_list) < 3: return
+def ends_with_되(word_list):
+    _word_list = filter_until_alphabet(word_list)
+    if len(_word_list) < 3: return
 
-    last_three = word_list[len(word_list) - 3 : len(word_list)]
+    last_three = _word_list[len(_word_list) - 3 : len(_word_list)]
     되_cases = [['ㄷ', "ㅗ", "ㅣ"], ['e', "h", "l"], ['E', "H", "L"]]
     for 되_case in 되_cases:
         if is_match(last_three, 되_case):
             return True
 
+def chunk_word_list(word_list, splitter=" "):
+    chunks=[]
+    cur = []
+    for i in range(len(word_list)):
+        if word_list[i] == splitter:
+            chunks.append([*cur])
+            cur = []
+        else:
+            cur.append(word_list[i])
+    return chunks
+
 def validate():
-    if ends_with_되():
-        text_history.clear()
-        raise EndsWithInvalidWordException("되")
+    for chunks in chunk_word_list(text_history, " "):
+        print("1")
+        if ends_with_되(chunks):
+            text_history.clear()
+            raise EndsWithInvalidWordException("되")

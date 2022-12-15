@@ -1,8 +1,8 @@
 import platform, subprocess
 
 applescript = """
-display dialog "되로 끝나는 문장은 없습니다!!" ¬
-with title "맞춤법을 지킵시다!" ¬
+display dialog "되로 끝나는 단어나 문장은 없습니다." ¬
+with title "맞춤법을 지키는 좋은 하루 되세요 :)" ¬
 with icon stop ¬
 buttons {"OK"}
 """
